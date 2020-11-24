@@ -151,6 +151,10 @@ class Conex {
         $_SESSION['idex'] = $id;
     }
 
+    /**
+     * 
+     * @return \Examen
+     */
     static function getExamen() {
         require_once 'Examen.php';
         $salida = array();
@@ -184,8 +188,10 @@ class Conex {
         $id = Randomid::generate_string(20);
         $titulo = $ex->getTitulo();
         $tipo = $ex->getTipo();
-        if ($stmt = self::$Conexion->prepare('INSERT INTO quiz (qid, nombre, type, eid, creation) VALUES (?, ?, ?, ?, NOW())')) {
-            $stmt->bind_param("ssss", $id, $titulo, $tipo, $idex);
+        /** esto se editara para que la asignatura ordene las preguntas**/
+        $tema='nada';
+        if ($stmt = self::$Conexion->prepare('INSERT INTO quiz (qid, nombre, type, asignatura, creation) VALUES (?, ?, ?, ?, NOW())')) {
+            $stmt->bind_param("ssss", $id, $titulo,$tema, $idex);
             $stmt->execute();
             $stmt->close();
         }
