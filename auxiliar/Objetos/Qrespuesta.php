@@ -13,9 +13,9 @@
  */
 class Qrespuesta  extends Pregunta {
     private $respuesta;
-    function __construct($titulo, $tipo, $respuesta) {
+    function __construct($titulo, $tipo, $respuesta, $asig) {
         $this->respuesta = $respuesta;
-        parent::__construct($titulo, $tipo);
+        parent::__construct($titulo, $tipo, $asig);
     }
 
     function getRespuesta() {

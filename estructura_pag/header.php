@@ -9,6 +9,9 @@
                 <a class="nav-link" href="../vistas_profesor/creation.php">Crear examen</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="../vistas_profesor/creation_pregunta.php">Crear pregunta</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="../vistas_profesor/crud_ex_prop.php">Crud examenenes</a>
             </li>
             <li class="nav-item">

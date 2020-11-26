@@ -18,9 +18,9 @@
         if (isset($_SESSION['examen'])) {
             $a = $_SESSION['examen'];
             ?>
-            <div class="creation-page">
+            <div class="creation-page mt30">
                 <form name="for" action="../controladores/controlador_general.php" method="post" class="creation">
-                    <p class="message text-center"><h1 class="text-center"><?= $a->getTitulo() ?> </h1><a><?= $a->getFechaHora() ?></a></p>
+                    <p class="message text-center"><h1 class="text-center"><?= $a->getTitulo() ?> </h1><a><?= $a->getFechaexpiracion() ?></a></p>
                     <input type="text" placeholder="titulo pregunta" name="tittleq" class="input_creation" required=""/>
                     <a>Tipo de pregunta</a>
                     <select id="question" name="question" onchange="ShowSelected();">
@@ -29,9 +29,9 @@
                         <option value="numero">Numerico</option>
                         <option value="opcional">Opcional</option>
                     </select>
-                    <a>Tema de la pregunta</a>
-                    <select id="question" name="question" onchange="">
-                        <option value="" selected=""> --- </option>
+                    <a>Asignatura de la pregunta</a>
+                    <select id="asignatura" name="asignatura" onchange="">
+                        <option value="nada" selected=""> --- </option>
                         <option value="Matematicas">Matematicas</option>
                         <option value="Ingles">Ingles</option>
                         <option value="Filosofia">Filosofia</option>
@@ -52,17 +52,17 @@
                 <?php
                 $aux = $a->getPreguntas();
                 foreach ($aux as $i => $salida) {
-                    echo '<div class="s90p"><h2>' . ($i + 1) . ') ' . $salida->getTitulo() . '</h2>';
+                    echo '<div class="s90p"><h4>' . $i . ') <input type="text" placeholder="titulo pregunta" name="tittleq" class="input_creation w97" required="" value="' . $salida->getTitulo() . '"/></h4>';
                     if ($salida->getTipo() == 'option') {
                         foreach ($salida->getOpciones() as $j => $fuera) {
                             if ($salida->getCorrecta() == '' . $j) {
-                                echo '<h4 class="s40p">' . $j . ') ' . $fuera . ' correcta</h4>';
+                                echo '<h4 class="s40p">' . $j . ') <input type="text" placeholder="titulo pregunta" name="tittleq" class="input_creation w70" required="" value="' . $fuera. '"/> correcta</h4>';
                             } else {
-                                echo '<h4 class="s40p">' . $j . ') ' . $fuera . '</h4>';
+                                echo '<h4 class="s40p">' . $j . ') <input type="text" placeholder="titulo pregunta" name="tittleq" class="input_creation w70" required="" value="' . $fuera. '"/>';
                             }
                         }
-                    } else if ($salida->getTipo() != 'option') {
-                        echo '<h4 class="s40p">Respuesta: ' . $salida->getRespuesta() . '</h4>';
+                    } else if ($salida->getTipo() != 'number') {
+                        echo '<h4 class="s40p">Respuesta: <input type="text" placeholder="titulo pregunta" name="tittleq" class="input_creation w70" required="" value="' . $salida->getRespuesta() . '"/></h4>';
                     }
                     echo '</div>';
                 }
@@ -74,7 +74,7 @@
             <div class="creation-page">
                 <form name="for" action="../controladores/controlador_general.php" method="post" class="creation">
                     <input type="text" placeholder="titulo examen" name="tittle" class="input_creation"/>
-                    <p class="caja_creation">Fecha de finalizacion:<input type="date" name="date_end"  class="input_creation"/> <a class="s40"></a>Hora de finalizacion:<input type="time" name="hour_end"  class="input_creation" value="00:00"/></p>
+                    <p class="caja_creation">Fecha de finalizacion:<input type="date" name="date_end"  class="input_creation"/> <a class="s40"></a>Hora de finalizacion:<input type="time" name="hour_end"  class="input_creation"/></p>
                     <input type="submit" name="nuevo_examen" value="Aceptar" class="botonsito">
                 </form>
             </div>

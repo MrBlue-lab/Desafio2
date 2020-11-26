@@ -21,12 +21,36 @@
             <?php
             session_start();
             foreach (Conex::getExamen() as $ex) {
+                /*
+                 * coger preguntas
+                 */
+                Conex::getPreguntas($ex);
+                foreach ($ex->getPreguntas() as $j => $q) {
+                    if ($q->getTipo() == 'option') {
+                        Conex::getOptions($q);
+                    }
+                    $ex->updatePregunta($q, $j);
+                }
                 ?>
-                <form name="for" action="../controladores/controlador_general.php" method="post" class="creation">
-                    <h3><?= $ex->getTitulo()?></h3>
-                    <a><?= $ex->getFecha()?></a>
-                    <a><?= $ex->getHora()?></a>
-                </form>
+            <div class="borde">
+                    <form name="for" action="../controladores/controlador_general.php" method="post" class="creation">
+
+                        <h3><?= $ex->getTitulo() ?></h3>
+                        <a>Creacion: <?= $ex->getFechacreacion() ?></a>
+                        <a>Expira: <?= $ex->getFechaexpiracion() ?></a><br>
+                        <?php
+                        foreach ($ex->getPreguntas() as $i => $qest) {
+                            echo '<a class="s40p">' . $i . ') ' . $qest->getTitulo() . ' ' . $qest->getTipo() . '</a><br>';
+                            if ($qest->getTipo() == 'option') {
+                                $op = $qest->getOpciones();
+                                for ($index = 0; $index < count($op); $index++) {
+                                    echo '<a class="s80p">' . $i . '.' . ($index + 1) . ')' . $op[$index] . '</a><br>';
+                                }
+                            }
+                        }
+                        ?>
+                    </form>
+                </div>
                 <?php
             }
             ?>

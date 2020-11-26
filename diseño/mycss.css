@@ -1,6 +1,14 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:300);
 html{
     font-size: 14px !important;
+    -ms-word-break: break-all;
+    word-break: break-all;
+    word-break: break-word;
+
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
 }
 .login-page {
     width: 360px;
@@ -207,7 +215,7 @@ body {
     position: relative;
     z-index: 1;
     background: #FFFFFF;
-    margin: 0 120px;
+    margin: 30px 120px 0px 120px !important;
     padding: 45px;
     text-align: left;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);margin-top: 100px;
@@ -221,8 +229,14 @@ body {
 .s40p{
     margin-left: 40px;
 }
+.s80p{
+    margin-left: 80px;
+}
 .s10{
     margin-left: 10% !important;
+}
+.w97{
+    width: 97% !important;
 }
 .w10{
     min-width: 10% !important;
@@ -310,4 +324,20 @@ footer{
     padding: 45px;
     text-align: left;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);margin-top: 100px;
+}
+.borde,tr{
+    border-bottom: #b9b9b9 0.5px solid;
+    border-top: #b9b9b9 0.5px solid;
+}
+table{
+    width: 100%;
+}
+td{
+    height: auto;
+}
+.p20{
+    padding: 20px;
+}
+.mt30{
+    margin-top: 30px;
 }

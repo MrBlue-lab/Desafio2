@@ -23,7 +23,6 @@
                             Click Me
                         </a>
                     </p>
-
                     <div class = "collapse" id = "collapsewithlink">
                         <div class = "card card-body">
                             esto es una prueba del loguin

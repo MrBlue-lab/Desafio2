@@ -7,9 +7,13 @@
  */
 
 /**
+ * Description of Constantes
  *
  * @author daw205
  */
-interface Funciones_pregunta {
-    //put your code here
+class Constantes {
+    public static $BBDD = 'desafio2';
+    public static $usuario = 'sergio';
+    public static $password = 'Chubaca2020';
+    public static $ruta = 'localhost';
 }

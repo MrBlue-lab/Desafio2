@@ -18,10 +18,10 @@ class Qopciones extends Pregunta {
     private $opciones;
     private $correcta;
 
-    function __construct($titulo, $tipo, $opciones, $correcta) {
+    function __construct($titulo, $tipo, $opciones, $correcta, $asig) {
         $this->opciones = $opciones;
         $this->correcta = $correcta;
-        parent::__construct($titulo, $tipo);
+        parent::__construct($titulo, $tipo, $asig);
     }
 
     function getCorrecta() {
