@@ -12,11 +12,11 @@ if (isset($_POST['loguin'])) {
         session_start();
         $_SESSION['loguin'] = $u;
         if ($u->getRol() == 'user') {
-            header('location: ../vistas_comun/home.php');
+            header('location: ../vistas/home.php');
         } else if ($u->getRol() == 'profesor') {
-            header('location: ../vistas_comun/home.php');
-        }else if ($u->getRol() == 'admin') {
-            header('location: ../vistas_comun/home.php');
+            header('location: ../vistas/home.php');
+        } else if ($u->getRol() == 'admin') {
+            header('location: ../vistas/home.php');
         }
     } else {
         header('location: ../index.php');
@@ -37,7 +37,7 @@ if (isset($_POST['back'])) {
 if (isset($_POST['addUser'])) {
     require_once '../auxiliar/Objetos/Conex.php';
     Conex::addUser($_POST['email'], $_POST['nombre'], $_POST['apellido'], $_POST['pass'], $_POST['rol']);
-    header('location: ../vistas_profesor/crud_usuarios.php');
+    header('location: ../vistas/crud_usuarios.php');
 }
 
 /*
@@ -46,7 +46,7 @@ if (isset($_POST['addUser'])) {
 if (isset($_POST['updateUser'])) {
     require_once '../auxiliar/Objetos/Conex.php';
     Conex::updateUser($_POST['id'], $_POST['email'], $_POST['nombre'], $_POST['apellido'], $_POST['rol']);
-    header('location: ../vistas_profesor/crud_usuarios.php');
+    header('location: ../vistas/crud_usuarios.php');
 }
 
 /*
@@ -55,7 +55,7 @@ if (isset($_POST['updateUser'])) {
 if (isset($_POST['dropUser'])) {
     require_once '../auxiliar/Objetos/Conex.php';
     Conex::dropUser($_POST['id']);
-    header('location: ../vistas_profesor/crud_usuarios.php');
+    header('location: ../vistas/crud_usuarios.php');
 }
 
 /*
@@ -100,7 +100,7 @@ if (isset($_POST['addExamen'])) {
     unset($_SESSION['examen']);
     unset($_SESSION['idq']);
     unset($_SESSION['idex']);
-    header('location: ../vistas_comun/home.php');
+    header('location: ../vistas/home.php');
 }
 
 /*
@@ -110,7 +110,7 @@ if (isset($_POST['nuevo_examen'])) {
     require_once '../auxiliar/Objetos/Examen.php';
     session_start();
     $_SESSION['examen'] = new Examen($_POST['tittle'], $_POST['hour_end'], $_POST['date_end']);
-    header('location: ../vistas_profesor/creation.php');
+    header('location: ../vistas/creation.php');
 } else if (isset($_POST['nueva_pregunta'])) {
     require_once '../auxiliar/Objetos/Examen.php';
     require_once '../auxiliar/Objetos/Pregunta.php';
@@ -119,8 +119,7 @@ if (isset($_POST['nuevo_examen'])) {
     session_start();
     $a = $_SESSION['examen'];
     if (isset($_POST['nueva_pregunta']) && $_POST['tittleq'] != '') {
-        require_once 'auxiliar.php';
-        Randomid::generate_string(20);
+        require_once '../auxiliar/auxiliar.php';
         /*
          * control del tipo de pregunta
          */
@@ -139,12 +138,37 @@ if (isset($_POST['nuevo_examen'])) {
         }
     }
     $_SESSION['examen'] = $a;
-    header('location: ../vistas_profesor/creation.php');
+    header('location: ../vistas/creation.php');
+} else if (isset($_POST['modificar_pregunta'])) {
+    require_once '../auxiliar/Objetos/Examen.php';
+    require_once '../auxiliar/Objetos/Pregunta.php';
+    require_once '../auxiliar/Objetos/Qopciones.php';
+    require_once '../auxiliar/Objetos/Qrespuesta.php';
+    session_start();
+    $a = $_SESSION['examen'];
+    $idpregunta = $_POST['idpregunta'];
+    if ($_POST['tittleq'] != '') {
+        if ($_POST['qtext'] != "") {
+            $a->modPregunta(new Qrespuesta($_POST['tittleq'], 'texto', $_POST['qtext'], $_REQUEST['asignatura']),$idpregunta);
+        } else if ($_POST['numerica'] != "") {
+            $a->modPregunta(new Qrespuesta($_POST['tittleq'], 'numerico', $_POST['numerica'], $_REQUEST['asignatura']),$idpregunta);
+        } else if ($_POST['Option'] != null && $_POST['radioq'] != '') {
+            $aux = array();
+            foreach ($_POST['Option'] as $como) {
+                if ($como != '') {
+                    $aux[] = $como;
+                }
+            }
+            $a->modPregunta(new Qopciones($_POST['tittleq'], 'option', $aux, $_POST['radioq'], $_REQUEST['asignatura']),$idpregunta);
+        }
+    }
+    $_SESSION['examen'] = $a;
+    header('location: ../vistas/creation.php');
 } else if (isset($_POST['cancelar'])) {
     /*
      * cancelar el proceso de nuevo examen
      */
     session_start();
     unset($_SESSION['examen']);
-    header('location: ../vistas_profesor/creation.php');
+    header('location: ../vistas/creation.php');
 }

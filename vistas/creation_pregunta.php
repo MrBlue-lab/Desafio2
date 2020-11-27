@@ -21,15 +21,13 @@
                 <input type="text" placeholder="titulo pregunta" name="tittleq" class="input_creation" required=""/>
                 <a>Tipo de pregunta</a>
                 <select id="question" name="question" onchange="ShowSelected();">
-                    <option value="" selected=""> --- </option>
-                    <option value="texto">Texto</option>
+                    <option value="texto" selected="">Texto</option>
                     <option value="numero">Numerico</option>
                     <option value="opcional">Opcional</option>
                 </select>
                 <a>Asignatura de la pregunta</a>
                 <select id="asignatura" name="asignatura" onchange="">
-                    <option value="nada" selected=""> --- </option>
-                    <option value="Matematicas">Matematicas</option>
+                    <option value="Matematicas" selected="">Matematicas</option>
                     <option value="Ingles">Ingles</option>
                     <option value="Filosofia">Filosofia</option>
                 </select>
@@ -38,6 +36,7 @@
                     require_once '../auxiliar/preguntas.php';
                     ?>
                 </div>
+                <script>ShowSelected();</script>
             </form>
         </div>
         <?php

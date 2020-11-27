@@ -16,7 +16,7 @@ class Conex {
     private static $Conexion;
 
     static function Nueva() {
-        require_once '../Constantes.php';
+        include_once '/var/www/html/EjemplosPHP/Desafio2/auxiliar/Constantes.php';
         self::$Conexion = new mysqli(Constantes::$ruta, Constantes::$usuario, Constantes::$password, Constantes::$BBDD);
     }
 
@@ -30,7 +30,7 @@ class Conex {
      */
     static function isUser($email, $password) {
         require_once 'User.php';
-        require_once '../auxiliar.php';
+        require_once '/var/www/html/EjemplosPHP/Desafio2/auxiliar/auxiliar.php';
         self::Nueva();
         $u = false;
         if ($stmt = self::$Conexion->prepare('SELECT * FROM user WHERE email = ? AND pasword = ?')) {
@@ -55,7 +55,7 @@ class Conex {
      */
     static function insertUser($email, $nombre, $apellidos, $password) {
         self::Nueva();
-        require_once '../auxiliar.php';
+        require_once '/var/www/html/EjemplosPHP/Desafio2/auxiliar/auxiliar.php';
         if ($stmt = self::$Conexion->prepare('INSERT INTO user (uid, email, nombre, apellidos, pasword) VALUES (?,?,?,?,?)')) {
             $stmt->bind_param("sssss", Randomid::generate_string(20), $email, $nombre, $apellidos, md5($password));
             $stmt->execute();
@@ -66,7 +66,7 @@ class Conex {
 
     static function addUser($email, $nombre, $apellidos, $password, $rol) {
         self::Nueva();
-        require_once '../auxiliar.php';
+        require_once '/var/www/html/EjemplosPHP/Desafio2/auxiliar/auxiliar.php';
         if ($stmt = self::$Conexion->prepare('INSERT INTO user (uid, email, nombre, apellidos, pasword,rol) VALUES (?,?,?,?,?,?)')) {
             $stmt->bind_param("sssssi", Randomid::generate_string(20), $email, $nombre, $apellidos, md5($password), $rol);
             $stmt->execute();
@@ -137,7 +137,7 @@ class Conex {
     static function insertExamen($user, $ex) {
         self::Nueva();
         require_once 'Examen.php';
-        require_once '../auxiliar.php';
+        require_once '/var/www/html/EjemplosPHP/Desafio2/auxiliar/auxiliar.php';
         require_once 'User.php';
         $id = Randomid::generate_string(20);
         $idu = $user->getId();
@@ -211,7 +211,7 @@ class Conex {
     static function insertPregunta($idex, $ex) {
         self::Nueva();
         require_once 'Examen.php';
-        require_once '../auxiliar.php';
+        require_once '/var/www/html/EjemplosPHP/Desafio2/auxiliar/auxiliar.php';
         require_once 'Pregunta.php';
         require_once 'User.php';
         $id = Randomid::generate_string(20);
@@ -244,7 +244,7 @@ class Conex {
     static function insertOpcion($idq, $res, $es) {
         self::Nueva();
         require_once 'Examen.php';
-        require_once '../auxiliar.php';
+        require_once '/var/www/html/EjemplosPHP/Desafio2/auxiliar/auxiliar.php';
         require_once 'Pregunta.php';
         require_once 'Qopciones.php';
         require_once 'User.php';
@@ -265,7 +265,7 @@ class Conex {
     static function insertTexto($idq, $res) {
         self::Nueva();
         require_once 'Examen.php';
-        require_once '../auxiliar.php';
+        require_once '/var/www/html/EjemplosPHP/Desafio2/auxiliar/auxiliar.php';
         require_once 'Pregunta.php';
         require_once 'Qrespuesta.php';
         require_once 'User.php';
@@ -286,7 +286,7 @@ class Conex {
     static function insertNumer($idq, $res) {
         self::Nueva();
         require_once 'Examen.php';
-        require_once '../auxiliar.php';
+        require_once '/var/www/html/EjemplosPHP/Desafio2/auxiliar/auxiliar.php';
         require_once 'Pregunta.php';
         require_once 'Qrespuesta.php';
         require_once 'User.php';

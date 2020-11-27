@@ -1,27 +1,26 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-
             <li class="nav-item">
-                <a class="nav-link" style="font-size: 31px;" href="../vistas_comun/home.php">Delphosdos</a>
+                <a class="nav-link" style="font-size: 31px;" href="../vistas/home.php">Delphosdos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="../vistas_profesor/creation.php">Crear examen</a>
+                <a class="nav-link" href="../vistas/creation.php">Crear examen</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="../vistas_profesor/creation_pregunta.php">Crear pregunta</a>
+                <a class="nav-link" href="../vistas/creation_pregunta.php">Crear pregunta</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="../vistas_profesor/crud_ex_prop.php">Crud examenenes</a>
+                <a class="nav-link" href="../vistas/crud_ex_prop.php">Crud examenenes</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="../vistas_profesor/seeExamenes.php">Ver examenenes</a>
+                <a class="nav-link" href="../vistas/seeExamenes.php">Ver examenenes</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="../vistas_profesor/prueba.php">Prueba</a>
+                <a class="nav-link" href="../vistas/prueba.php">Prueba</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="../vistas_profesor/crud_usuarios.php">Crud usuarios</a>
+                <a class="nav-link" href="../vistas/crud_usuarios.php">Crud usuarios</a>
             </li>
             <li class="nav-item">
                 <form name="for" action="../controladores/controlador_general.php" method="post" class="login-form">

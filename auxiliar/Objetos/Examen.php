@@ -64,12 +64,23 @@ class Examen {
     }
 
     function addPregunta(Pregunta $dato) {
+        require_once '/var/www/html/EjemplosPHP/Desafio2/auxiliar/auxiliar.php';
         if ($dato != null) {
-            $this->preguntas [] = $dato;
+            $id = Randomid::generate_string(20);
+            $dato->setQid($id);
+            $this->preguntas [$id] = $dato;
         }
     }
-    
-    function updatePregunta(Pregunta $dato,$pos) {
+
+    function modPregunta(Pregunta $dato, $id) {
+        require_once '/var/www/html/EjemplosPHP/Desafio2/auxiliar/auxiliar.php';
+        if ($dato != null) {
+            $dato->setQid($id);
+            $this->preguntas [$id] = $dato;
+        }
+    }
+
+    function updatePregunta(Pregunta $dato, $pos) {
         if ($dato != null) {
             $this->preguntas [$pos] = $dato;
         }
