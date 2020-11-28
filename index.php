@@ -19,6 +19,7 @@
                         <input type="password" placeholder="contraseña"  name="pass"/>
                         <input type="submit" name="loguin" value="Aceptar" class="botonsito">
                         <p class="message">No estas registrado? <a href="registro.php">Crea una cuenta</a></p>
+                        <p class="message">Olvidaste tu contraseña? <a href="vistas/pass_olvidado.php">Recupera tu cuenta</a></p>
                     </form>
                 </div>
             </div>

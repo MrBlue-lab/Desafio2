@@ -19,35 +19,39 @@
             $a = $_SESSION['examen'];
             ?>
             <div class="creation-page mt30">
-                <form name="for" action="../controladores/controlador_general.php" method="post" class="creation">
-                    <p class="message text-center"><h1 class="text-center"><?= $a->getTitulo() ?> </h1><a><?= $a->getFechaexpiracion() ?></a></p>
-                    <input type="text" placeholder="titulo pregunta" name="tittleq" class="input_creation" required=""/>
-                    <a>Tipo de pregunta</a>
-                    <select id="question" name="question" onchange="ShowSelected();">
-                        <option value="texto">Texto</option>
-                        <option value="numero">Numerico</option>
-                        <option value="opcional">Opcional</option>
-                    </select>
-                    <a>Asignatura de la pregunta</a>
-                    <select id="asignatura" name="asignatura" onchange="">
-                        <option value="Matematicas" selected="">Matematicas</option>
-                        <option value="Ingles">Ingles</option>
-                        <option value="Filosofia">Filosofia</option>
-                    </select>
-                    <div class="text-center">
-                        <?php
-                        require_once '../auxiliar/preguntas.php';
-                        ?>
-                    </div>
-                    <script>ShowSelected();</script>
-                </form>
+                <p class="message text-center"><h1 class="text-center"><?= $a->getTitulo() ?> </h1><a><?= $a->getFechaexpiracion() ?></a></p>
+            <form name="for" action="../controladores/controlador_general.php" method="post" class="creation text-center">
+                <br><br>
+                <input type="submit" name="cancelar" value="Cancelar examen" class="btn botonsitod w10 text-center">
+                <input type="submit" name="addExamen" value="Terminar examen" class="btn botonsito w10 text-center">
+            </form>
+            <br><hr>
+            <h2 class="text-center">Añadir pregunta</h2>
+            <form name="for" action="../controladores/controlador_general.php" method="post" class="creation">
+                <input type="text" placeholder="titulo pregunta" name="tittleq" class="input_creation" required=""/>
+                <a>Tipo de pregunta</a>
+                <select id="question" name="question" onchange="ShowSelected();">
+                    <option value="texto">Texto</option>
+                    <option value="numero">Numerico</option>
+                    <option value="opcional">Opcional</option>
+                </select>
+                <a>Asignatura de la pregunta</a>
+                <select id="asignatura" name="asignatura" onchange="">
+                    <option value="Matematicas" selected="">Matematicas</option>
+                    <option value="Ingles">Ingles</option>
+                    <option value="Filosofia">Filosofia</option>
+                </select>
+                <div class="text-center mt30">
+                    <?php
+                    require_once '../auxiliar/preguntas.php';
+                    ?>
+                </div>
+                <script>ShowSelected();</script>
+            </form>
+            <?php 
+            if ($a->getPreguntas()) { ?>
                 <br><hr>
-                <form name="for" action="../controladores/controlador_general.php" method="post" class="creation text-center">
-                    <br><br>
-                    <input type="submit" name="cancelar" value="Cancelar examen" class="btn botonsitod w10 text-center">
-                    <input type="submit" name="addExamen" value="Terminar examen" class="btn botonsito w10 text-center">
-                </form>
-                <br><hr><h2 class="text-center mb10">Vista previa del examen</h2>
+                <h2 class="text-center mb10">Vista previa del examen</h2>
                 <?php
                 $aux = $a->getPreguntas();
                 $cont = 0;
@@ -118,21 +122,23 @@
                                 <input type="submit" name="modificar_pregunta" value="Modificar pregunta" class="botonsito btn w10 text-center">
                             </div>
                         </div>
-                    </form><hr>
+                    </form>
                     <?php
                 }
-                ?>
-            </div>
-        <?php } else { ?>
-            <div class="creation-page">
-                <form name="for" action="../controladores/controlador_general.php" method="post" class="creation">
-                    <input type="text" placeholder="titulo examen" name="tittle" class="input_creation"/>
-                    <p class="caja_creation">Fecha de finalizacion:<input type="date" name="date_end"  class="input_creation"/> <a class="s40"></a>Hora de finalizacion:<input type="time" name="hour_end"  class="input_creation"/></p>
-                    <input type="submit" name="nuevo_examen" value="Aceptar" class="botonsito">
-                </form>
-            </div>
-            <?php }
-        require_once '../estructura_pag/foother.php';
-        ?>
-    </body>
+            }
+            ?>
+        </div>
+    <?php } else { ?>
+        <div class="creation-page">
+            <form name="for" action="../controladores/controlador_general.php" method="post" class="creation">
+                <input type="text" placeholder="titulo examen" name="tittle" class="input_creation" required=""/>
+                <p class="caja_creation">Fecha de finalizacion:<input type="date" name="date_end"  class="input_creation"/> <a class="s40"></a>Hora de finalizacion:<input type="time" name="hour_end"  class="input_creation"/></p>
+                <input type="submit" name="nuevo_examen" value="Aceptar" class="botonsito">
+            </form>
+        </div>
+        <?php
+    }
+    require_once '../estructura_pag/foother.php';
+    ?>
+</body>
 </html>

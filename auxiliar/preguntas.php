@@ -4,13 +4,13 @@
         /* Para obtener el valor */
         var cod = document.getElementById("question").value;
         if (cod === "texto") {
-            document.getElementById("demo").innerHTML = "<hr><fieldset><legend>Respuesta texto</legend><div class='card-body'>" +
+            document.getElementById("demo").innerHTML = "<fieldset><legend>Respuesta texto</legend><div class='card-body'>" +
                     "<input type='text' placeholder='Respuesta' name='qtext' class='input_creation' required=''/></div></fieldset>" +
                     "<input type='submit' name='nueva_pregunta' value='Insertar pregunta' class='botonsito btn w10 text-center'>";
         }
         if (cod === "numero") {
             document.getElementById("demo").innerHTML =
-                    "<hr><fieldset><legend>Respuesta numerica</legend><div class='card-body'>" +
+                    "<fieldset><legend>Respuesta numerica</legend><div class='card-body'>" +
                     "<input type='number' value='0' name='numerica' class='input_creation' required=''/>" +
                     "</div></fieldset>" +
                     "<input type='submit' name='nueva_pregunta' value='Insertar pregunta' class='botonsito btn w10 text-center'>";
@@ -18,7 +18,7 @@
 
         if (cod === "opcional") {
             document.getElementById("demo").innerHTML =
-                    "<hr><fieldset>" +
+                    "<fieldset>" +
                     "<legend>Respuesta Opcional</legend>" +
                     "<div class='card-body'>" +
                     "<input type='text' placeholder='Opcion 1' name='Option[]' class='input_creation w70' required=''/>" +

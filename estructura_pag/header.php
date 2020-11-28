@@ -17,10 +17,10 @@
                 <a class="nav-link" href="../vistas/seeExamenes.php">Ver examenenes</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="../vistas/prueba.php">Prueba</a>
+                <a class="nav-link" href="../vistas/crud_usuarios.php">Crud usuarios</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="../vistas/crud_usuarios.php">Crud usuarios</a>
+                <a class="nav-link" href="../vistas/prueba.php">Prueba</a>
             </li>
             <li class="nav-item">
                 <form name="for" action="../controladores/controlador_general.php" method="post" class="login-form">
@@ -28,7 +28,7 @@
                 </form>
             </li>
             <li class="nav-item">
-                <img src="../diseño/img/keanu.png" alt="alt" width="55px" style="position: absolute;z-index: 1500; margin-top: -9px;"/>
+                <img src="../diseño/img/keanu.png" alt="alt" width="55px" style="position: absolute;z-index: 1500; margin-top: -9px; right: 50px;d"/>
             </li>
         </ul>
     </div>
