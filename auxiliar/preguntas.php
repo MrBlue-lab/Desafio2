@@ -67,6 +67,10 @@
                     "<input type='submit' name='modificar_pregunta' value='Modificar pregunta' class='botonsito btn w10 text-center'>";
         }
     }
+    function cambiaValores() {
+        var inputNombre = document.getElementsById("nombre");
+        inputNombre.value = "DYP";
+    }
 </script>
 <!--
 

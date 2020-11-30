@@ -10,7 +10,6 @@
     <body>
         <?php
         require_once '../estructura_pag/header.php';
-        session_start();
         require_once '../auxiliar/Objetos/Conex.php';
         ?>
         <div class="creation-page p20 mt30">

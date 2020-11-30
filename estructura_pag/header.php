@@ -28,10 +28,11 @@
                 </form>
             </li>
             <li class="nav-item">
-                <img src="../diseño/img/keanu.png" alt="alt" width="55px" style="position: absolute;z-index: 1500; margin-top: -9px; right: 50px;d"/>
+                <img src="../diseño/img/keanu.png" alt="alt" width="55px" style="position: absolute;z-index: 1000; margin-top: -9px; right: 50px;d"/>
             </li>
+            <?php
+            session_start();
+            ?>
         </ul>
     </div>
-
-
 </nav>

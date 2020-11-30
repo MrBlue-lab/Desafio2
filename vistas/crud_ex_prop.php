@@ -23,7 +23,6 @@
                 <?php
                 require_once '../auxiliar/Objetos/Conex.php';
                 require_once '../auxiliar/Objetos/Examen.php';
-                session_start();
                 foreach (Conex::getExamen() as $ex) {
                     ?>
                 <tr class="borde">

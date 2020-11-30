@@ -39,5 +39,5 @@ class Qopciones extends Pregunta {
     function setOpciones($opciones): void {
         $this->opciones = $opciones;
     }
-
+    
 }

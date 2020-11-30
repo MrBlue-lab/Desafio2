@@ -11,9 +11,7 @@
         <?php
         require_once '../estructura_pag/header.php';
         ?>
-        
         <div class="modal-body row pm0">
-            
             <div class="col-md-6 pr0">
                 <div class="creation-page">
                 <div class = "container">
@@ -35,7 +33,6 @@
                 <img src="../auxiliar/peridot.png" alt="alt"/>
             </div>
         </div>
-
         <?php
         require_once '../estructura_pag/foother.php';
         ?>

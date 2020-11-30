@@ -14,7 +14,6 @@
     <body>
         <?php
         require_once '../estructura_pag/header.php';
-        session_start();
         ?>
         <div class="creation-page">
             <form name="for" action="../controladores/controlador_general.php" method="post" class="creation">

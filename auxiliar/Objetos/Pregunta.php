@@ -12,11 +12,22 @@ class Pregunta {
     private $tipo;
     private $asig;
     private $fechaCreacion;
+    private $hisory;
 
-    function __construct($titulo, $tipo, $asig) {
+    function __construct3($titulo, $tipo, $asig) {
         $this->titulo = $titulo;
         $this->tipo = $tipo;
         $this->asig = $asig;
+        $this->hisory = false;
+    }
+
+    public function __construct() {
+        $arguments = func_get_args();
+        $numberOfArguments = func_num_args();
+
+        if (method_exists($this, $function = '__construct' . $numberOfArguments)) {
+            call_user_func_array(array($this, $function), $arguments);
+        }
     }
 
     function getFechaCreacion() {
@@ -57,6 +68,14 @@ class Pregunta {
 
     function setTipo($tipo): void {
         $this->tipo = $tipo;
+    }
+
+    function getHisory() {
+        return $this->hisory;
+    }
+
+    function setHisory($hisory): void {
+        $this->hisory = $hisory;
     }
 
 }

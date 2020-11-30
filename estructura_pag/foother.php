@@ -1,5 +1,5 @@
 <footer>
-    <img src="../diseño/img/sit.png" alt="alt" width="100px" style="position: absolute; margin-left: 40%;z-index: 1500; margin-top: -110px;"/>    
+    <img src="../diseño/img/sit.png" alt="alt" width="100px" style="position: absolute; margin-left: 40%;z-index: 1000; margin-top: -110px;"/>    
     <h3 style="margin: 2%;">Sergio Susín Cejudo</h3>
 </footer>
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

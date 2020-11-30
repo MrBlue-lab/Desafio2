@@ -11,6 +11,8 @@
  *
  * @author daw205
  */
+require_once __DIR__ . '/../auxiliar.php';
+
 class Examen {
 
     private $id;
@@ -64,7 +66,6 @@ class Examen {
     }
 
     function addPregunta(Pregunta $dato) {
-        require_once '/var/www/html/EjemplosPHP/Desafio2/auxiliar/auxiliar.php';
         if ($dato != null) {
             $id = Randomid::generate_string(20);
             $dato->setQid($id);
@@ -72,12 +73,29 @@ class Examen {
         }
     }
 
+    function addPreguntaId(Pregunta $dato) {
+        if ($dato != null) {
+            $this->preguntas [$dato->getQid()] = $dato;
+        }
+    }
+
+    function isPreguntaId($id) {
+        $salida = null;
+        if ($this->preguntas [$id]) {
+            $salida = $this->preguntas [$id];
+        }
+        return $salida;
+    }
+
     function modPregunta(Pregunta $dato, $id) {
-        require_once '/var/www/html/EjemplosPHP/Desafio2/auxiliar/auxiliar.php';
         if ($dato != null) {
             $dato->setQid($id);
             $this->preguntas [$id] = $dato;
         }
+    }
+
+    function dropPregunta($id) {
+        unset($this->preguntas [$id]);
     }
 
     function updatePregunta(Pregunta $dato, $pos) {

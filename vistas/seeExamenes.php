@@ -9,17 +9,16 @@
         require_once '../auxiliar/Objetos/Examen.php';
         require_once '../auxiliar/Objetos/Qopciones.php';
         require_once '../auxiliar/Objetos/Qrespuesta.php';
+        require_once '../auxiliar/Objetos/Conex.php';
         ?>
     </head>
     <body>
         <?php
         require_once '../estructura_pag/header.php';
-        require_once '../auxiliar/Objetos/Conex.php';
         $examenes = Conex::getExamen();
         ?>
         <div class="creation-page">
             <?php
-            session_start();
             foreach (Conex::getExamen() as $ex) {
                 /*
                  * coger preguntas

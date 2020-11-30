@@ -11,12 +11,20 @@
  * Conexion como el atributo estatico de la clase conexion
  * @author daw205
  */
+require_once 'Examen.php';
+require_once 'Pregunta.php';
+require_once 'Qrespuesta.php';
+require_once 'Pregunta.php';
+require_once 'User.php';
+require_once 'Qopciones.php';
+require_once __DIR__ . '/../auxiliar.php';
+require_once __DIR__ . '/../Constantes.php';
+
 class Conex {
 
     private static $Conexion;
 
     static function Nueva() {
-        require_once __DIR__ . '/../Constantes.php';
         self::$Conexion = new mysqli(Constantes::$ruta, Constantes::$usuario, Constantes::$password, Constantes::$BBDD);
     }
 
@@ -29,7 +37,6 @@ class Conex {
      * @param type User
      */
     static function isUser($email, $password) {
-        require_once 'User.php';
         self::Nueva();
         $u = false;
         if ($stmt = self::$Conexion->prepare('SELECT * FROM user WHERE email = ? AND pasword = ?')) {
@@ -52,7 +59,6 @@ class Conex {
      * @return \User
      */
     static function existePersona($email) {
-        require_once 'User.php';
         self::Nueva();
         $u = false;
         if ($stmt = self::$Conexion->prepare('SELECT * FROM user WHERE email = ?')) {
@@ -92,7 +98,6 @@ class Conex {
      */
     static function insertUser($email, $nombre, $apellidos, $password) {
         self::Nueva();
-        require_once __DIR__ . '/../auxiliar.php';
         if ($stmt = self::$Conexion->prepare('INSERT INTO user (uid, email, nombre, apellidos, pasword) VALUES (?,?,?,?,?)')) {
             $stmt->bind_param("sssss", Randomid::generate_string(20), $email, $nombre, $apellidos, md5($password));
             $stmt->execute();
@@ -101,9 +106,16 @@ class Conex {
         self::closeConexion();
     }
 
+    /**
+     * 
+     * @param type $email
+     * @param type $nombre
+     * @param type $apellidos
+     * @param type $password
+     * @param type $rol
+     */
     static function addUser($email, $nombre, $apellidos, $password, $rol) {
         self::Nueva();
-        require_once __DIR__ . '/../auxiliar.php';
         if ($stmt = self::$Conexion->prepare('INSERT INTO user (uid, email, nombre, apellidos, pasword,rol) VALUES (?,?,?,?,?,?)')) {
             $stmt->bind_param("sssssi", Randomid::generate_string(20), $email, $nombre, $apellidos, md5($password), $rol);
             $stmt->execute();
@@ -117,7 +129,6 @@ class Conex {
      * @return users devuelve una lista de usuarios
      */
     static function getUsers() {
-        require_once 'User.php';
         $salida = array();
         self::Nueva();
         if ($stmt = self::$Conexion->prepare('SELECT * FROM user')) {
@@ -131,6 +142,48 @@ class Conex {
             $stmt->close();
             self::closeConexion();
             return $salida;
+        }
+    }
+
+    static function getPreguntasTipo() {
+        $salida = array();
+        self::Nueva();
+        if ($stmt = self::$Conexion->prepare('SELECT * FROM quiz')) {
+            $stmt->execute();
+            $stmt->bind_result($qid, $titulo, $tipo, $asig, $fechaCreacion);
+            $vect = array('Filosofia' => array(), 'Ingles' => array(), 'Matematicas' => array(), 'nada' => array());
+
+            while ($stmt->fetch()) {
+                $p = new Pregunta($titulo, $tipo, $asig);
+                $p->setQid($qid);
+                $p->setFechaCreacion($fechaCreacion);
+                switch ($asig) {
+                    case 'Filosofia':
+                        $aux = $vect['Filosofia'];
+                        $aux[$qid] = $p;
+                        $vect['Filosofia'] = $aux;
+                        break;
+                    case 'Ingles':
+                        $aux = $vect['Ingles'];
+                        $aux[$qid] = $p;
+                        $vect['Ingles'] = $aux;
+                        break;
+                    case 'Matematicas':
+                        $aux = $vect['Matematicas'];
+                        $aux[$qid] = $p;
+                        $vect['Matematicas'] = $aux;
+                        break;
+                    default:
+                        $aux = $vect['nada'];
+                        $aux[$qid] = $p;
+                        $vect['nada'] = $aux;
+                        break;
+                }
+            }
+
+            $stmt->close();
+            self::closeConexion();
+            return $vect;
         }
     }
 
@@ -173,9 +226,6 @@ class Conex {
      */
     static function insertExamen($user, $ex) {
         self::Nueva();
-        require_once 'Examen.php';
-        require_once __DIR__ . '/../auxiliar.php';
-        require_once 'User.php';
         $id = Randomid::generate_string(20);
         $idu = $user->getId();
         $fecha = $ex->getFechaexpiracion();
@@ -193,8 +243,30 @@ class Conex {
      * 
      * @return \Examen
      */
+    static function isPreunta($id) {
+        self::Nueva();
+        $p = null;
+        if ($stmt = self::$Conexion->prepare('SELECT * FROM quiz WHERE qid = ?')) {
+            $stmt->bind_param("s", $id);
+            $stmt->execute();
+            $stmt->bind_result($qid, $titulo, $tipo, $asig, $fechaCreacion);
+
+            if ($stmt->fetch()) {
+                $p = new Pregunta($titulo, $tipo, $asig);
+                $p->setQid($qid);
+                $p->setFechaCreacion($fechaCreacion);
+            }
+            $stmt->close();
+        }
+        self::closeConexion();
+        return $p;
+    }
+
+    /**
+     * 
+     * @return \Examen
+     */
     static function getExamen() {
-        require_once 'Examen.php';
         $salida = array();
         self::Nueva();
         if ($stmt = self::$Conexion->prepare('SELECT * FROM examen  ORDER BY creation DESC')) {
@@ -216,11 +288,11 @@ class Conex {
         }
     }
 
+    /**
+     * 
+     * @param type $ex
+     */
     static function getPreguntas(&$ex) {
-        require_once 'Pregunta.php';
-        require_once 'Qopciones.php';
-        require_once 'Qrespuesta.php';
-        require_once 'Examen.php';
         self::Nueva();
         $eid = $ex->getId();
         if ($stmt = self::$Conexion->prepare('SELECT quiz.* FROM quiz,examen_quiz WHERE examen_quiz.eid=? AND examen_quiz.qid=quiz.qid ')) {
@@ -241,16 +313,35 @@ class Conex {
 
     /**
      * 
+     * @param type $id
+     */
+    static function getPreguntaId($id) {
+        self::Nueva();
+        $p = null;
+        if ($stmt = self::$Conexion->prepare('SELECT * FROM quiz WHERE qid = ?')) {
+            $stmt->bind_param("s", $id);
+            $stmt->execute();
+            $stmt->bind_result($qid, $titulo, $tipo, $asig, $fechaCreacion);
+
+            if ($stmt->fetch()) {
+                $p = new Pregunta($titulo, $tipo, $asig);
+                $p->setQid($qid);
+                $p->setFechaCreacion($fechaCreacion);
+            }
+            $stmt->close();
+            self::closeConexion();
+        }
+        return $p;
+    }
+
+    /**
+     * 
      * @param type $idex
      * @param type $ex
      * @return type
      */
-    static function insertPregunta($idex, $ex) {
+    static function insertPregunta($ex) {
         self::Nueva();
-        require_once 'Examen.php';
-        require_once __DIR__ . '/../auxiliar.php';
-        require_once 'Pregunta.php';
-        require_once 'User.php';
         $id = Randomid::generate_string(20);
         $titulo = $ex->getTitulo();
         $tipo = $ex->getTipo();
@@ -262,13 +353,28 @@ class Conex {
             $stmt->execute();
             $stmt->close();
         }
+        self::closeConexion();
+        $_SESSION['idq'] = $id;
+        return $id;
+    }
+
+    /**
+     * insertar pregunta en examen
+     * @param type $idex
+     * @param type $id
+     * @return boolean
+     */
+    static function insertPreguntaExamen($idex, $id) {
+        self::Nueva();
+        $salida = false;
         if ($stmt = self::$Conexion->prepare('INSERT INTO examen_quiz (eid, qid) VALUES (?, ?)')) {
             $stmt->bind_param("ss", $idex, $id);
             $stmt->execute();
             $stmt->close();
+            $salida = true;
         }
         self::closeConexion();
-        $_SESSION['idq'] = $id;
+        return $salida;
     }
 
     /**
@@ -280,11 +386,6 @@ class Conex {
      */
     static function insertOpcion($idq, $res, $es) {
         self::Nueva();
-        require_once 'Examen.php';
-        require_once __DIR__ . '/../auxiliar.php';
-        require_once 'Pregunta.php';
-        require_once 'Qopciones.php';
-        require_once 'User.php';
         $id = Randomid::generate_string(20);
         if ($stmt = self::$Conexion->prepare('INSERT INTO options (oid, qid, nombre,correcta) VALUES (?,?,?,?)')) {
             $stmt->bind_param("ssss", $id, $idq, $res, $es);
@@ -301,11 +402,6 @@ class Conex {
      */
     static function insertTexto($idq, $res) {
         self::Nueva();
-        require_once 'Examen.php';
-        require_once __DIR__ . '/../auxiliar.php';
-        require_once 'Pregunta.php';
-        require_once 'Qrespuesta.php';
-        require_once 'User.php';
         $id = Randomid::generate_string(20);
         if ($stmt = self::$Conexion->prepare('INSERT INTO text (tid, qid, tittle) VALUES (?,?,?)')) {
             $stmt->bind_param("sss", $id, $idq, $res);
@@ -322,11 +418,6 @@ class Conex {
      */
     static function insertNumer($idq, $res) {
         self::Nueva();
-        require_once 'Examen.php';
-        require_once __DIR__ . '/../auxiliar.php';
-        require_once 'Pregunta.php';
-        require_once 'Qrespuesta.php';
-        require_once 'User.php';
         $id = Randomid::generate_string(20);
         if ($stmt = self::$Conexion->prepare('INSERT INTO number (nid, qid, sol) VALUES (?,?,?)')) {
             $stmt->bind_param("ssi", $id, $idq, $res);
@@ -337,13 +428,9 @@ class Conex {
     }
 
     static function getOptions(&$qui) {
-        require_once 'Pregunta.php';
-        require_once 'Qopciones.php';
-        require_once 'Qrespuesta.php';
-        require_once 'Examen.php';
         self::Nueva();
         $eid = $qui->getQid();
-        if ($stmt = self::$Conexion->prepare('SELECT DISTINCT options.nombre,options.correcta FROM quiz,options WHERE options.qid=?')) {
+        if ($stmt = self::$Conexion->prepare('SELECT DISTINCT nombre,correcta FROM options WHERE qid = ?')) {
             $stmt->bind_param("s", $eid);
             $stmt->execute();
             $stmt->bind_result($nombre, $correcta);
@@ -361,6 +448,43 @@ class Conex {
                 }
             }
             $p = new Qopciones($qui->getTitulo(), $qui->getTipo(), $options, $correctas, $qui->getAsig());
+            $p->setQid($qui->getQid());
+            $p->setFechaCreacion($qui->getFechaCreacion());
+            $qui = $p;
+            $stmt->close();
+            self::closeConexion();
+        }
+    }
+
+    static function getNumerico(&$qui) {
+        self::Nueva();
+        $eid = $qui->getQid();
+        if ($stmt = self::$Conexion->prepare('SELECT DISTINCT sol FROM number WHERE qid = ?')) {
+            $stmt->bind_param("s", $eid);
+            $stmt->execute();
+            $stmt->bind_result($sol);
+            if ($stmt->fetch()) {
+                $p = new Qrespuesta($qui->getTitulo(), $qui->getTipo(), $sol, $qui->getAsig());
+            }
+            $p->setQid($qui->getQid());
+            $p->setFechaCreacion($qui->getFechaCreacion());
+            $qui = $p;
+            $stmt->close();
+            self::closeConexion();
+        }
+    }
+
+    static function getQTexto(&$qui) {
+        self::Nueva();
+        $eid = $qui->getQid();
+        if ($stmt = self::$Conexion->prepare('SELECT tittle FROM `text` WHERE qid = ? ')) {
+
+            $stmt->bind_param("s", $eid);
+            $stmt->execute();
+            $stmt->bind_result($sol);
+            if ($stmt->fetch()) {
+                $p = new Qrespuesta($qui->getTitulo(), $qui->getTipo(), $sol, $qui->getAsig());
+            }
             $p->setQid($qui->getQid());
             $p->setFechaCreacion($qui->getFechaCreacion());
             $qui = $p;

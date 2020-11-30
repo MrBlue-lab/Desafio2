@@ -72,27 +72,34 @@ if (isset($_POST['registro'])) {
 }
 
 /*
- * controlador agregar examen a bd
+ * ******************************************************************************
+ * ********************************************* controlador agregar examen a bd
  */
 if (isset($_POST['addExamen'])) {
     session_start();
     Conex::insertExamen($_SESSION['loguin'], $_SESSION['examen']);
 
     $aux = $_SESSION['examen']->getPreguntas();
+    //comprobar si la pregunta existe
     foreach ($aux as $i => $salida) {
-        Conex::insertPregunta($_SESSION['idex'], $salida);
-        if ($salida->getTipo() == 'option') {
-            foreach ($salida->getOpciones() as $j => $fuera) {
-                if ($salida->getCorrecta() == '' . $j) {
-                    Conex::insertOpcion($_SESSION['idq'], $fuera, 1);
-                } else {
-                    Conex::insertOpcion($_SESSION['idq'], $fuera, 0);
+        if (Conex::isPreunta($i) == null) {
+            $idpreunta=Conex::insertPregunta($salida);
+            Conex::insertPreguntaExamen($_SESSION['idex'], $idpreunta);
+            if ($salida->getTipo() == 'option') {
+                foreach ($salida->getOpciones() as $j => $fuera) {
+                    if ($salida->getCorrecta() == '' . $j) {
+                        Conex::insertOpcion($_SESSION['idq'], $fuera, 1);
+                    } else {
+                        Conex::insertOpcion($_SESSION['idq'], $fuera, 0);
+                    }
                 }
+            } else if ($salida->getTipo() == 'texto') {
+                Conex::insertTexto($_SESSION['idq'], $salida->getRespuesta());
+            } else if ($salida->getTipo() == 'numerico') {
+                Conex::insertNumer($_SESSION['idq'], $salida->getRespuesta());
             }
-        } else if ($salida->getTipo() == 'texto') {
-            Conex::insertTexto($_SESSION['idq'], $salida->getRespuesta());
-        } else if ($salida->getTipo() == 'numerico') {
-            Conex::insertNumer($_SESSION['idq'], $salida->getRespuesta());
+        }else{
+            Conex::insertPreguntaExamen($_SESSION['idex'], $i);
         }
     }
     unset($_SESSION['examen']);
@@ -107,8 +114,19 @@ if (isset($_POST['addExamen'])) {
 if (isset($_POST['nuevo_examen'])) {
     session_start();
     $_SESSION['examen'] = new Examen($_POST['tittle'], $_POST['hour_end'], $_POST['date_end']);
+    $Preguntast = Conex::getPreguntasTipo();
+    foreach ($Preguntast as $a => $salida) {
+        foreach ($salida as $j => $q) {
+            if ($q->getTipo() == 'option') {
+                Conex::getOptions($salida[$j]);
+                $Preguntast[$a] = $salida;
+            }
+        }
+    }
+    $_SESSION['QuizH'] = $Preguntast;
     header('location: ../vistas/creation.php');
-} else if (isset($_POST['nueva_pregunta'])) {
+}
+if (isset($_POST['nueva_pregunta'])) {
     session_start();
     $a = $_SESSION['examen'];
     if (isset($_POST['nueva_pregunta']) && $_POST['tittleq'] != '') {
@@ -131,7 +149,27 @@ if (isset($_POST['nuevo_examen'])) {
     }
     $_SESSION['examen'] = $a;
     header('location: ../vistas/creation.php');
-} else if (isset($_POST['modificar_pregunta'])) {
+}
+if (isset($_POST['agregar_pregunta_history'])) {
+    session_start();
+    $a = $_SESSION['examen'];
+    $idquest = $_POST['idpregunta'];
+    if ($a->isPreguntaId($idquest) == null) {
+        $quest = Conex::getPreguntaId($idquest);
+        if ($quest->getTipo() == 'option') {
+            Conex::getOptions($quest);
+        } else if ($quest->getTipo() == 'numerico') {
+            Conex::getNumerico($quest);
+        } else {
+            Conex::getQTexto($quest);
+        }
+        $quest->setHisory(true);
+        $a->addPreguntaId($quest);
+        $_SESSION['examen'] = $a;
+    }
+    header('location: ../vistas/creation.php');
+}
+if (isset($_POST['modificar_pregunta'])) {
     session_start();
     $a = $_SESSION['examen'];
     $idpregunta = $_POST['idpregunta'];
@@ -152,7 +190,16 @@ if (isset($_POST['nuevo_examen'])) {
     }
     $_SESSION['examen'] = $a;
     header('location: ../vistas/creation.php');
-} else if (isset($_POST['cancelar'])) {
+}
+if (isset($_POST['borrar_pregunta'])) {
+    session_start();
+    $a = $_SESSION['examen'];
+    $idpregunta = $_POST['idpregunta'];
+    $a->dropPregunta($idpregunta);
+    $_SESSION['examen'] = $a;
+    header('location: ../vistas/creation.php');
+}
+if (isset($_POST['cancelar'])) {
     /*
      * cancelar el proceso de nuevo examen
      */
@@ -166,7 +213,6 @@ if (isset($_POST['nuevo_examen'])) {
 if (isset($_REQUEST['solicitar_password'])) {
     // Recupero lo datos del formulario
     $correo = $_REQUEST['correo'];
-
     // Comprueba el correo para ver si el usuario esta registrado
     if (Conex::existePersona($correo)) {
         // Si existe creo una nueva
