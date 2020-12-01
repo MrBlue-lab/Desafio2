@@ -28,7 +28,7 @@ class Qopciones extends Pregunta {
         return $this->correcta;
     }
 
-    function setCorrecta($correcta): void {
+    function setCorrecta($correcta){
         $this->correcta = $correcta;
     }
 
@@ -36,7 +36,7 @@ class Qopciones extends Pregunta {
         return $this->opciones;
     }
 
-    function setOpciones($opciones): void {
+    function setOpciones($opciones){
         $this->opciones = $opciones;
     }
     

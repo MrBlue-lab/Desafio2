@@ -14,10 +14,13 @@
                 <a class="nav-link" href="../vistas/crud_ex_prop.php">Crud examenenes</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="../vistas/seeExamenes.php">Ver examenenes</a>
+                <a class="nav-link" href="../vistas/crud_usuarios.php">Crud usuarios</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="../vistas/crud_usuarios.php">Crud usuarios</a>
+                <a class="nav-link" href="../vistas/seeExamenes.php">Mis examenenes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../vistas/responder.php">Responder examen</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="../vistas/prueba.php">Prueba</a>

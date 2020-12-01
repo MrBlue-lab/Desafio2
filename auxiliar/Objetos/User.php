@@ -37,7 +37,7 @@ class User {
         return $this->id;
     }
 
-    function setId($id): void {
+    function setId($id) {
         $this->id = $id;
     }
     function getNombre() {

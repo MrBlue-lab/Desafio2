@@ -83,7 +83,7 @@ if (isset($_POST['addExamen'])) {
     //comprobar si la pregunta existe
     foreach ($aux as $i => $salida) {
         if (Conex::isPreunta($i) == null) {
-            $idpreunta=Conex::insertPregunta($salida);
+            $idpreunta = Conex::insertPregunta($salida);
             Conex::insertPreguntaExamen($_SESSION['idex'], $idpreunta);
             if ($salida->getTipo() == 'option') {
                 foreach ($salida->getOpciones() as $j => $fuera) {
@@ -98,13 +98,42 @@ if (isset($_POST['addExamen'])) {
             } else if ($salida->getTipo() == 'numerico') {
                 Conex::insertNumer($_SESSION['idq'], $salida->getRespuesta());
             }
-        }else{
+        } else {
             Conex::insertPreguntaExamen($_SESSION['idex'], $i);
         }
     }
     unset($_SESSION['examen']);
     unset($_SESSION['idq']);
     unset($_SESSION['idex']);
+    header('location: ../vistas/home.php');
+}
+/*
+ * ******************************************************************************
+ * ********************************************* controlador agregar examen a bd
+ */
+if (isset($_POST['nueva_pregunta_bd'])) {
+    session_start();
+    /*
+     * control del tipo de pregunta
+     */
+    $id = Conex::insertPregunta(new Pregunta($_POST['tittleq'], $_POST['question'], $_POST['asignatura']));
+    if ($_POST['qtext'] != "") {
+        Conex::insertTexto($id, $_POST['qtext']);
+    } else if ($_POST['numerica'] != "") {
+        Conex::insertNumer($id, $_POST['numerica']);
+    } else if ($_POST['Option'] != null && $_POST['radioq'] != '') {
+        $aux = array();
+        foreach ($_POST['Option'] as $a => $como) {
+            if ($como != '') {
+                $es = 0;
+                if ($a == $_POST['radioq']) {
+                    $es = 1;
+                }
+                Conex::insertOpcion($id, $como, $es);
+            }
+        }
+        $a->addPregunta(new Qopciones($_POST['tittleq'], 'option', $aux, $_POST['radioq'], $_REQUEST['asignatura']));
+    }
     header('location: ../vistas/home.php');
 }
 
@@ -119,6 +148,12 @@ if (isset($_POST['nuevo_examen'])) {
         foreach ($salida as $j => $q) {
             if ($q->getTipo() == 'option') {
                 Conex::getOptions($salida[$j]);
+                $Preguntast[$a] = $salida;
+            } else if ($q->getTipo() == 'texto') {
+                Conex::getQTexto($salida[$j]);
+                $Preguntast[$a] = $salida;
+            } else if ($q->getTipo() == 'numerico') {
+                Conex::getNumerico($salida[$j]);
                 $Preguntast[$a] = $salida;
             }
         }
@@ -224,4 +259,54 @@ if (isset($_REQUEST['solicitar_password'])) {
     }
     // Muestro existo tanto este registrado o no, por motivos de seguridad
     header('Location: ../vistas/exito_cambio_pass.php');
+}
+if (isset($_REQUEST['deleteExamen'])) {
+    $id = $_REQUEST['eid'];
+    if (Conex::isExamen($id)) {
+        Conex::dropPreguntasEx($id);
+        Conex::dropEx($id);
+    }
+    header('Location: ../vistas/crud_ex_prop.php');
+}
+if (isset($_REQUEST['updateExamen'])) {
+    $id = $_REQUEST['eid'];
+    if (Conex::isExamen($id)) {
+        $exTitulo = $_REQUEST['exTitulo'];
+        $exFechaE = $_REQUEST['exFechaE'];
+        $exHoraE = $_REQUEST['exHoraE'];
+        $exFechaHora = $exFechaE . ' ' . $exHoraE;
+        Conex::updateEx($id, $exFechaHora, $exTitulo);
+    }
+    header('Location: ../vistas/crud_ex_prop.php');
+}
+if (isset($_REQUEST['addExamenN'])) {
+    session_start();
+    $exTitulo = $_REQUEST['exTitulo'];
+    $exFechaE = $_REQUEST['exFechaE'];
+    $exHoraE = $_REQUEST['exHoraE'];
+    $exFechaHoraE = $exFechaE . ' ' . $exHoraE;
+    Conex::addEx($_SESSION['loguin'], $exFechaHoraE, $exTitulo);
+    header('Location: ../vistas/crud_ex_prop.php');
+}
+if (isset($_REQUEST['modificar_see_examen'])) {
+    $id = $_REQUEST['eid'];
+    if (Conex::isExamen($id)) {
+        $exFechaE = $_REQUEST['date_end'];
+        $exHoraE = $_REQUEST['hour_end'];
+        $exTitulo = $_REQUEST['title_end'];
+        $exFechaHora = $exFechaE . ' ' . $exHoraE;
+        Conex::updateEx($id, $exFechaHora, $exTitulo);
+    }
+    header('Location: ../vistas/seeExamenes.php');
+}
+if (isset($_REQUEST['desactivar_examen']) || isset($_REQUEST['activar_examen'])) {
+    $id = $_REQUEST['eid'];
+    if (Conex::isExamen($id)) {
+        if (isset($_REQUEST['activar_examen'])) {
+            Conex::activoEx($id,1);
+        } else {
+            Conex::activoEx($id,0);
+        }
+    }
+    header('Location: ../vistas/seeExamenes.php');
 }

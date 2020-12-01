@@ -235,6 +235,9 @@ body {
 .w97{
     width: 97% !important;
 }
+.w90{
+    width: 90% !important;
+}
 .w10{
     min-width: 10% !important;
     max-width: 24% !important;
@@ -368,4 +371,25 @@ hr{
 }
 .p22{
     padding-right: 22% !important;
+}
+select:disabled {
+    color:#4d4d4d;
+}
+input[type=text]:read-only {
+  color: #4d4d4d;
+}
+.ml20{
+    margin-left: 20px;
+}
+.fs30{
+    font-size: 30px !important;
+}
+.text-right{
+    text-align: right;
+}
+.dt{
+    display: table;
+}
+.backwhite{
+    background: white;
 }

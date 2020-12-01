@@ -17,11 +17,11 @@
                 <div class = "container">
                     <h2>Loguin correcto</h2>
                     <p>
-                        <a class = "btn botonsito" data-toggle = "collapse" href = "#collapsewithlink" role = "button" aria-expanded = "false" aria-controls = "collapsewithlink">
+                        <a class = "btn botonsito w10" data-toggle = "collapse" href = "#collapsewithlink" role = "button" aria-expanded = "false" aria-controls = "collapsewithlink">
                             Click Me
                         </a>
                     </p>
-                    <div class = "collapse" id = "collapsewithlink">
+                    <div class = "collapse w10" id = "collapsewithlink">
                         <div class = "card card-body">
                             esto es una prueba del loguin
                         </div>

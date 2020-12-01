@@ -267,20 +267,37 @@ class Conex {
      * @return \Examen
      */
     static function getExamen() {
-        $salida = array();
+        $salida = null;
         self::Nueva();
         if ($stmt = self::$Conexion->prepare('SELECT * FROM examen  ORDER BY creation DESC')) {
             $stmt->execute();
             $stmt->bind_result($eid, $tittle, $active, $creation, $expire, $id_creator);
+            $salida = array();
+            while ($stmt->fetch()) {
+                $u = new Examen($eid, $tittle, $active, $creation, $expire, $id_creator);
+                $salida[] = $u;
+            }
+            $stmt->close();
+            self::closeConexion();
+        }
+        return $salida;
+    }
+
+    /**
+     * 
+     * @return \Examen
+     */
+    static function getExamenIdU($id) {
+        $salida = array();
+        self::Nueva();
+        if ($stmt = self::$Conexion->prepare('SELECT * FROM examen WHERE id_creator = ? ORDER BY creation DESC')) {
+            $stmt->bind_param("s", $id);
+            $stmt->execute();
+            $stmt->bind_result($eid, $tittle, $active, $creation, $expire, $id_creator);
 
             while ($stmt->fetch()) {
-                $u = new Examen($tittle, $expire, $creation);
-                $u->setId($eid);
-                $u->setActivo($active);
-                $u->setFechacreacion($creation);
-                $u->setFechaexpiracion($expire);
-                $u->setIdcreador($id_creator);
-                $salida[] = $u;
+                $u = new Examen($eid, $tittle, $active, $creation, $expire, $id_creator);
+                $salida[$eid] = $u;
             }
             $stmt->close();
             self::closeConexion();
@@ -295,6 +312,7 @@ class Conex {
     static function getPreguntas(&$ex) {
         self::Nueva();
         $eid = $ex->getId();
+        $p = null;
         if ($stmt = self::$Conexion->prepare('SELECT quiz.* FROM quiz,examen_quiz WHERE examen_quiz.eid=? AND examen_quiz.qid=quiz.qid ')) {
             $stmt->bind_param("s", $eid);
             $stmt->execute();
@@ -304,7 +322,7 @@ class Conex {
                 $p = new Pregunta($titulo, $tipo, $asig);
                 $p->setQid($qid);
                 $p->setFechaCreacion($fechaCreacion);
-                $ex->addPregunta($p);
+                $ex->addPreguntaId($p);
             }
             $stmt->close();
             self::closeConexion();
@@ -347,7 +365,6 @@ class Conex {
         $tipo = $ex->getTipo();
         $asig = $ex->getAsig();
         /** esto se editara para que la asignatura ordene las preguntas* */
-        $tema = 'nada';
         if ($stmt = self::$Conexion->prepare('INSERT INTO quiz (qid, nombre, type, asignatura, creation) VALUES (?, ?, ?, ?, NOW())')) {
             $stmt->bind_param("ssss", $id, $titulo, $tipo, $asig);
             $stmt->execute();
@@ -478,7 +495,7 @@ class Conex {
         self::Nueva();
         $eid = $qui->getQid();
         if ($stmt = self::$Conexion->prepare('SELECT tittle FROM `text` WHERE qid = ? ')) {
-
+            $p = null;
             $stmt->bind_param("s", $eid);
             $stmt->execute();
             $stmt->bind_result($sol);
@@ -491,6 +508,103 @@ class Conex {
             $stmt->close();
             self::closeConexion();
         }
+    }
+
+    /**
+     * funcion borrar examen oo
+     * @param type $id
+     */
+    static function dropEx($id) {
+        self::Nueva();
+        if ($stmt = self::$Conexion->prepare('DELETE FROM examen WHERE eid=?')) {
+            $stmt->bind_param("s", $id);
+            $stmt->execute();
+            $stmt->close();
+        }
+        self::closeConexion();
+    }
+
+    /**
+     * funcion borrar todas las preguntas 
+     * @param type $id
+     */
+    static function dropPreguntasEx($id) {
+        self::Nueva();
+        if ($stmt = self::$Conexion->prepare('DELETE FROM examen_quiz WHERE eid=?')) {
+            $stmt->bind_param("s", $id);
+            $stmt->execute();
+            $stmt->close();
+        }
+        self::closeConexion();
+    }
+
+    /**
+     * 
+     * @return \Examen
+     */
+    static function isExamen($eid) {
+        $salida = null;
+        self::Nueva();
+        if ($stmt = self::$Conexion->prepare('SELECT * FROM examen WHERE eid=?')) {
+            $stmt->bind_param("s", $eid);
+            $stmt->execute();
+            $stmt->bind_result($eid, $tittle, $active, $creation, $expire, $id_creator);
+            if ($stmt->fetch()) {
+                $salida = new Examen($tittle, $expire, $creation, $eid, $active, $creation, $expire, $id_creator);
+            }
+            $stmt->close();
+            self::closeConexion();
+        }
+        return $salida;
+    }
+
+    /**
+     * funcion actualizar examen
+     * @param type $id
+     * @param type $FechaHora
+     * @param type $titulo
+     */
+    static function updateEx($id, $FechaHora, $titulo) {
+        self::Nueva();
+        if ($stmt = self::$Conexion->prepare('UPDATE examen SET tittle = ?, expire = ? WHERE eid=?')) {
+            $stmt->bind_param("sss", $titulo, $FechaHora, $id);
+            $stmt->execute();
+            $stmt->close();
+        }
+        self::closeConexion();
+    }
+
+    /**
+     * funcion actualizar examen
+     * @param type $id
+     * @param type $FechaHora
+     * @param type $titulo
+     */
+    static function activoEx($id,$in) {
+        self::Nueva();
+        if ($stmt = self::$Conexion->prepare('UPDATE examen SET active = ? WHERE eid=?')) {
+            $stmt->bind_param("is", $in, $id);
+            $stmt->execute();
+            $stmt->close();
+        }
+        self::closeConexion();
+    }
+    /**
+     * funcion actualizar examen
+     * @param type $user
+     * @param type $FechaHoraE
+     * @param type $titulo
+     */
+    static function addEx($user, $FechaHoraE, $titulo) {
+        self::Nueva();
+        $id = Randomid::generate_string(20);
+        $idu = $user->getId();
+        if ($stmt = self::$Conexion->prepare('INSERT INTO examen (eid, tittle, active, creation, expire, id_creator) VALUES (?,?,1,NOW(),?,?)')) {
+            $stmt->bind_param("ssss", $id, $titulo, $FechaHoraE, $idu);
+            $stmt->execute();
+            $stmt->close();
+        }
+        self::closeConexion();
     }
 
 }

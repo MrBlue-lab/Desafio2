@@ -19,7 +19,7 @@
             <form name="for" action="../controladores/controlador_general.php" method="post" class="creation">
                 <input type="text" placeholder="titulo pregunta" name="tittleq" class="input_creation" required=""/>
                 <a>Tipo de pregunta</a>
-                <select id="question" name="question" onchange="ShowSelected();">
+                <select id="question" name="question" onchange="ShowSelected2();">
                     <option value="texto" selected="">Texto</option>
                     <option value="numero">Numerico</option>
                     <option value="opcional">Opcional</option>
@@ -30,12 +30,14 @@
                     <option value="Ingles">Ingles</option>
                     <option value="Filosofia">Filosofia</option>
                 </select>
+                <br>
+                <br>
                 <div class="text-center">
                     <?php
                     require_once '../auxiliar/preguntas.php';
                     ?>
                 </div>
-                <script>ShowSelected();</script>
+                <script>ShowSelected2();</script>
             </form>
         </div>
         <?php

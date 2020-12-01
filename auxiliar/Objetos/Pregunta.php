@@ -20,6 +20,13 @@ class Pregunta {
         $this->asig = $asig;
         $this->hisory = false;
     }
+    function __construct4($qid,$titulo, $tipo, $asig) {
+        $this->qid=$qid;
+        $this->titulo = $titulo;
+        $this->tipo = $tipo;
+        $this->asig = $asig;
+        $this->hisory = false;
+    }
 
     public function __construct() {
         $arguments = func_get_args();
@@ -42,7 +49,7 @@ class Pregunta {
         return $this->qid;
     }
 
-    function setQid($qid): void {
+    function setQid($qid){
         $this->qid = $qid;
     }
 
@@ -50,7 +57,7 @@ class Pregunta {
         return $this->asig;
     }
 
-    function setAsig($asig): void {
+    function setAsig($asig){
         $this->asig = $asig;
     }
 
@@ -62,11 +69,11 @@ class Pregunta {
         return $this->tipo;
     }
 
-    function setTitulo($titulo): void {
+    function setTitulo($titulo){
         $this->titulo = $titulo;
     }
 
-    function setTipo($tipo): void {
+    function setTipo($tipo) {
         $this->tipo = $tipo;
     }
 
@@ -74,7 +81,7 @@ class Pregunta {
         return $this->hisory;
     }
 
-    function setHisory($hisory): void {
+    function setHisory($hisory) {
         $this->hisory = $hisory;
     }
 

@@ -22,7 +22,7 @@ class Qrespuesta  extends Pregunta {
         return $this->respuesta;
     }
 
-    function setRespuesta($respuesta): void {
+    function setRespuesta($respuesta){
         $this->respuesta = $respuesta;
     }
 

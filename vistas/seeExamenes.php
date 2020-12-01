@@ -15,41 +15,39 @@
     <body>
         <?php
         require_once '../estructura_pag/header.php';
-        $examenes = Conex::getExamen();
+        $user = $_SESSION['loguin'];
+        $examenes = Conex::getExamenIdU($user->getId());
         ?>
         <div class="creation-page">
             <?php
-            foreach (Conex::getExamen() as $ex) {
-                /*
-                 * coger preguntas
-                 */
-                Conex::getPreguntas($ex);
-                foreach ($ex->getPreguntas() as $j => $q) {
-                    if ($q->getTipo() == 'option') {
-                        Conex::getOptions($q);
-                    }
-                    $ex->updatePregunta($q, $j);
-                }
+            foreach (Conex::getExamen() as $np => $ex) {
+                $FECHA = $ex->getFechaE();
                 ?>
-            <div class="borde">
-                    <form name="for" action="../controladores/controlador_general.php" method="post" class="creation">
-
-                        <h3><?= $ex->getTitulo() ?></h3>
-                        <a>Creacion: <?= $ex->getFechacreacion() ?></a>
-                        <a>Expira: <?= $ex->getFechaexpiracion() ?></a><br>
-                        <?php
-                        foreach ($ex->getPreguntas() as $i => $qest) {
-                            echo '<a class="s40p">' . $i . ') ' . $qest->getTitulo() . ' ' . $qest->getTipo() . '</a><br>';
-                            if ($qest->getTipo() == 'option') {
-                                $op = $qest->getOpciones();
-                                for ($index = 0; $index < count($op); $index++) {
-                                    echo '<a class="s80p">' . $i . '.' . ($index + 1) . ')' . $op[$index] . '</a><br>';
-                                }
+                <hr>
+                <form name="for" action="../controladores/controlador_general.php" method="post" class="creation">
+                    <input type="text" id="eid" name="eid" value="<?= $ex->getId() ?>" hidden=""/>
+                    <div class="mb10 ">
+                        <p class="text-center">
+                            <input type="text" name="title_end" class="input_creation text-center fs30" value="<?= $ex->getTitulo() ?>"/>
+                        </p>
+                        <p class="caja_creation text-center">
+                            <a class="s5p">Fecha de finalizacion:</a>
+                            <input type="date" name="date_end" class="input_creation" value="<?= $ex->getFechaE() ?>"/>
+                            <a class="s5p">Hora de finalizacion:</a>
+                            <input type="time" name="hour_end" class="input_creation" value="<?= $ex->getHoraE() ?>"/>
+                            <input type="submit" name="modificar_see_examen" value="Modificar" class="btn btn-info s40p">
+                        </p>
+                        <p class="text-center">
+                            <?php
+                            if ($ex->getActivo() == 1) {
+                                ?><input type="submit" name="desactivar_examen" value="Desactivar" class="btn btn-danger"><?php
+                            } else {
+                                ?><input type="submit" name="activar_examen" value="Activar" class="btn btn-success"><?php
                             }
-                        }
-                        ?>
-                    </form>
-                </div>
+                            ?>
+                        </p>
+                    </div>
+                </form>
                 <?php
             }
             ?>

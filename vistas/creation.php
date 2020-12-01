@@ -80,12 +80,11 @@
                                                                 echo '<h5 class="s40p">' . $j . ') ' . $fuera . '</h5>';
                                                             }
                                                         }
+                                                    } else if ($Quizh->getTipo() == 'texto') {
+                                                        echo '<h4 class="s40p">Respuesta:' . $Quizh->getRespuesta() . '</h4>';
+                                                    } else if ($Quizh->getTipo() == 'numerico') {
+                                                        echo '<h4 class="s40p">Respuesta:' . $Quizh->getRespuesta() . '</h4>';
                                                     }
-                                                    // else if ($Quizh->getTipo() == 'texto') {
-                                                    // echo '<h4 class="s40p">Respuesta:' . $Quizh->getRespuesta() . '</h4>';
-                                                    //} else if ($Quizh->getTipo() == 'numerico') {
-                                                    //echo '<h4 class="s40p">Respuesta:' . $Quizh->getRespuesta() . '</h4>';
-                                                    //}
                                                     ?>
                                                 </div>
                                             </fieldset>
@@ -132,13 +131,20 @@
                 $aux = $a->getPreguntas();
                 $cont = 0;
                 foreach ($aux as $i => $salida) {
+                    $hist = '';
+                    $hist2 = '';
+                    $hist3 = '';
+                    if ($salida->getHisory()) {
+                        $hist = 'readonly=""';
+                        $hist2 = 'disabled';
+                        $hist3 = '<span class="glyphicon glyphicon-lock ml20"></span>';
+                    }
                     ?>
                     <form name="for" action="../controladores/controlador_general.php" method="post" class="creation">
-                        <div class="s90p mb10"><h4><?= $cont ?>) <input type="text" placeholder="titulo pregunta" name="tittleq" class="input_creation w97" required="" value="<?= $salida->getTitulo() ?>"/></h4>
+                        <div class="s90p mb10"><h4><?= $cont ?>) <input type="text" placeholder="titulo pregunta" name="tittleq" class="input_creation w90" <?= $hist ?> required="" value="<?= $salida->getTitulo() ?>"/><?= $hist3 ?></h4>
                             <input type="text" id="idpregunta" name="idpregunta" value="<?= $i ?>" hidden=""/>
-                            <h7><?= $i ?></h7>
                             <a>Tipo de pregunta</a>
-                            <select id="Demoexam<?= $i ?>" name="Demoexam<?= $i ?>" onchange='ShowQuest("<?= $i ?>")'>
+                            <select id="Demoexam<?= $i ?>" name="Demoexam<?= $i ?>" onchange='ShowQuest("<?= $i ?>")' <?= $hist2 ?>>
                                 <?php if ($salida->getTipo() == 'option') { ?>
                                     <option value="texto">Texto</option>
                                     <option value="numero">Numerico</option>
@@ -154,7 +160,7 @@
                                 <?php } ?>
                             </select>
                             <a>Asignatura de la pregunta</a>
-                            <select id="asignatura" name="asignatura">
+                            <select id="asignatura" name="asignatura" <?= $hist2 ?>>
                                 <?php if ($salida->getAsig() == 'Matematicas') {
                                     ?>
                                     <option value="Matematicas"selected="">Matematicas</option>
@@ -187,16 +193,16 @@
                                                 }
                                                 for ($k = 0; $k < count($correcta); $k++) {
                                                     if ($correcta[$k] == '' . $j) {
-                                                        echo '<h4 class="s40p">' . $j . ') <input type="text" name="Option[]" class="input_creation w70" required="" value="' . $fuera . '"/><input type="radio" id="radioq" name="radioq" value="' . $j . '" checked=""><label> Correcto</label></h4>';
+                                                        echo '<h4 class="s40p">' . $j . ') <input type="text" name="Option[]" class="input_creation w70" required="" value="' . $fuera . '" ' . $hist . '/><input type="radio" id="radioq" name="radioq" value="' . $j . '" checked="" ' . $hist2 . '><label> Correcto</label></h4>';
                                                     } else {
-                                                        echo '<h4 class="s40p">' . $j . ') <input type="text" name="Option[]" class="input_creation w70" required="" value="' . $fuera . '"/><input type="radio" id="radioq" name="radioq" value="' . $j . '"></h4>';
+                                                        echo '<h4 class="s40p">' . $j . ') <input type="text" name="Option[]" class="input_creation w70" required="" value="' . $fuera . '" ' . $hist . '/><input type="radio" id="radioq" name="radioq" value="' . $j . '" ' . $hist2 . '></h4>';
                                                     }
                                                 }
                                             }
                                         } else if ($salida->getTipo() == 'texto') {
-                                            echo '<h4 class="s40p">Respuesta: <input type="text" name="qtext" class="input_creation w70" required="" value="' . $salida->getRespuesta() . '"/></h4>';
+                                            echo '<h4 class="s40p"><textarea name="qtext" class="input_creation w70" required=""' . $hist . '>' . $salida->getRespuesta() . '</textarea></h4>';
                                         } else if ($salida->getTipo() == 'numerico') {
-                                            echo '<h4 class="s40p">Respuesta: <input type="number" name="numerica" class="input_creation w70" required="" value="' . $salida->getRespuesta() . '"/></h4>';
+                                            echo '<h4 class="s40p"><input type="number" name="numerica" class="input_creation w70" required="" value="' . $salida->getRespuesta() . '"  ' . $hist . '/></h4>';
                                         }
                                         $cont++;
                                         ?>

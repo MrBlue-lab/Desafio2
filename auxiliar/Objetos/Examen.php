@@ -23,7 +23,16 @@ class Examen {
     private $idcreador;
     private $preguntas;
 
-    function __construct($titulo, $hora, $fecha) {
+    public function __construct() {
+        $arguments = func_get_args();
+        $numberOfArguments = func_num_args();
+
+        if (method_exists($this, $function = '__construct' . $numberOfArguments)) {
+            call_user_func_array(array($this, $function), $arguments);
+        }
+    }
+
+    function __construct3($titulo, $hora, $fecha) {
         $this->titulo = $titulo;
         $this->preguntas = array();
         if ($fecha != '') {
@@ -31,6 +40,30 @@ class Examen {
         } else {
             $this->fechaexpiracion = null;
         }
+    }
+
+    function __construct6($eid, $tittle, $active, $creation, $expire, $id_creator) {
+        $this->titulo = $tittle;
+        $this->id = $eid;
+        $this->activo = $active;
+        $this->fechacreacion = $creation;
+        $this->fechaexpiracion = $expire;
+        $this->idcreador = $id_creator;
+    }
+
+    function __construct8($titulo, $hora, $fecha, $eid, $active, $creation, $expire, $id_creator) {
+        $this->titulo = $titulo;
+        $this->preguntas = array();
+        if ($fecha != '') {
+            $this->fechaexpiracion = $fecha . ' ' . $hora . ':00';
+        } else {
+            $this->fechaexpiracion = null;
+        }
+        $this->id = $eid;
+        $this->activo = $active;
+        $this->fechacreacion = $creation;
+        $this->fechaexpiracion = $expire;
+        $this->idcreador = $id_creator;
     }
 
     function getId() {
@@ -108,6 +141,14 @@ class Examen {
         return $this->fechacreacion;
     }
 
+    function getFechaE() {
+        return substr($this->fechaexpiracion, 0, 10);
+    }
+
+    function getHoraE() {
+        return substr($this->fechaexpiracion, 11);
+    }
+
     function getActivo() {
         return $this->activo;
     }
@@ -120,19 +161,19 @@ class Examen {
         return $this->idcreador;
     }
 
-    function setFechacreacion($fechacreacion): void {
+    function setFechacreacion($fechacreacion) {
         $this->fechacreacion = $fechacreacion;
     }
 
-    function setActivo($activo): void {
+    function setActivo($activo) {
         $this->activo = $activo;
     }
 
-    function setFechaexpiracion($fechaexpiracion): void {
+    function setFechaexpiracion($fechaexpiracion) {
         $this->fechaexpiracion = $fechaexpiracion;
     }
 
-    function setIdcreador($idcreador): void {
+    function setIdcreador($idcreador) {
         $this->idcreador = $idcreador;
     }
 
